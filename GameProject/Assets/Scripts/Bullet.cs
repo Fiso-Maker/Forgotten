@@ -14,7 +14,7 @@ public class Bullet : MonoBehaviour
     }
     void OnEnable()
     {
-        // transform.LookAt(target.transform.position);
+        //transform.LookAt(target.transform.position);
     }
 
     // Update is called once per frame
@@ -22,16 +22,16 @@ public class Bullet : MonoBehaviour
     {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if(other.gameObject.CompareTag("Player"))
         {
             var tar = other.gameObject.GetComponent<PlayerCtrl>();
             tar.health.MyCurrentValue -= 10;
 
             gameObject.SetActive(false);
         }
-        else if(other.gameObject.name.Contains("wall"))
+        else if(other.gameObject.CompareTag("wall"))
         {
             gameObject.SetActive(false);
         }

@@ -17,6 +17,7 @@ public class PlayerCtrl : MonoBehaviour
     public float moveSpeed;
     public float runSpeed;
     public float turnspeed;
+    public float RecoveryTime = 0f; // 스테미너 회복 시간
     public GameObject player;
 
     Rigidbody rb;
@@ -25,22 +26,26 @@ public class PlayerCtrl : MonoBehaviour
 
     bool isAttack; // 공격중인지 확인
 
-    bool isAttackPose; // 발도중인지 확인
+    bool isAttackPose; // 발도상태인지 확인
 
     bool isAttackBtnClick; // 공격키 입력 확인
+
+    bool isAttackPose_Change;   //발도 or 납도 중
 
     bool isWalk; // 걷는지 확인
 
     bool isRun; // 뛰는지 확인
 
-    public bool isDodge; // 회피 확인
+    bool isRunBtn; // 뛰기 버튼 입력 확인
+
+    bool isDodge; // 회피 확인
 
     bool isCrouch; // 앉기 확인
 
     bool isDodgeorCrouch;
 
-    public Vector3 moveDir;
-    public Vector3 dodgeDir;
+    Vector3 moveDir;
+    Vector3 dodgeDir;
     
     void Awake()
     {
@@ -67,13 +72,24 @@ public class PlayerCtrl : MonoBehaviour
             
         // }
         inputKey();
-        Attack_St();
-        if(!isAttack) // 공격중이 아닐때 이동
+        
+        if(!isAttack && !isAttackPose_Change) // 공격중이 아닐때 이동
         {
             Move();
         }
-        Dodge();
-        if(!isAttackPose)
+        if(isDodgeorCrouch)
+        {
+            StartCoroutine(Dodge());
+        }
+        if (isAttackBtnClick)    // 공격 코루틴
+        {
+            StartCoroutine(Attack_St());
+        }
+        if (isAttackPose)        // 공격종료 코루틴
+        {
+            Attack_ED_Check();
+        }
+        else
         {
             Crouch();
         }
@@ -81,7 +97,7 @@ public class PlayerCtrl : MonoBehaviour
         PrintAnimation();
     }
 
-    private void Dodge()
+    /*private void Dodge()
     {
         if(!isDodge && isDodgeorCrouch && moveDir != Vector3.zero && stamina.MyCurrentValue >= 20f)
         {
@@ -97,32 +113,71 @@ public class PlayerCtrl : MonoBehaviour
     private void DodgeOut()
     {
         isDodge=false;
+    }*/
+    IEnumerator Dodge()
+    {
+        if (!isDodge && isDodgeorCrouch && moveDir != Vector3.zero && stamina.MyCurrentValue >= 20f)
+        {
+            dodgeDir = moveDir;
+            anim.SetTrigger("doDodge");
+            isDodge = true;
+            isCrouch = false;
+            stamina.MyCurrentValue -= 20f;
+
+            yield return new WaitForSeconds(0.75f);
+            isDodge = false;
+        }
     }
 
-    private void Attack_St()
+    IEnumerator Attack_St()
     {
-        if(!isAttack && isAttackBtnClick && !isAttackPose)
+        if (!isAttack && isAttackBtnClick && !isAttackPose)
         {
-            isAttackPose = true;     
+            isAttackPose = true;
             anim.SetTrigger("StartAttack");
             anim.SetFloat("drawSword", 1.0f);
+            isAttackPose_Change = true;
+            yield return new WaitForSeconds(1.5f);
+            isAttackPose_Change = false;
+
         }
-        else if(isAttackPose && isAttackBtnClick)
+        else if (isAttackPose && isAttackBtnClick)
         {
             anim.SetTrigger("doAttack");
-            isAttack=true;
-            Invoke("Attack_Fin",1.5f);
+            isAttack = true;
+            yield return new WaitForSeconds(1.5f);
+            isAttack = false;
         }
-        else if(isAttackPose && isRun)
+    }
+    IEnumerator Attack_ED()
+    {
+        isAttackPose = false;
+        anim.SetFloat("drawSword", -1.0f);
+        isAttackPose_Change = true;
+        yield return new WaitForSeconds(1.5f);
+        isAttackPose_Change = false;
+    }
+    void Attack_ED_Check()
+    {
+        if (isAttackPose && isRun)
         {
-            isAttackPose=false;
-            anim.SetFloat("drawSword", -1.0f);
+            StartCoroutine(Attack_ED());
         }
     }
 
-    private void Attack_Fin()
+    
+    private void St_Recovery()
     {
-        isAttack=false;
+        if(stamina.MyCurrentValue >= 100)
+        {
+            RecoveryTime = 0f;
+            return;
+        }
+        RecoveryTime += Time.deltaTime;
+        if(RecoveryTime >= 2)
+        {
+            stamina.MyCurrentValue += 5f * Time.deltaTime;
+        }
     }
 
     private void Crouch()
@@ -142,7 +197,8 @@ public class PlayerCtrl : MonoBehaviour
     {
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
-        isRun = Input.GetButton("Run");
+        isRunBtn = Input.GetButton("Run");
+        isRun = isRunBtn && stamina.MyCurrentValue > 0;
         isDodgeorCrouch = Input.GetButtonDown("DodgeorCrouch");
         isAttackBtnClick = Input.GetButtonDown("Attack");
         isWalk = h!=0||v!=0;
@@ -180,27 +236,30 @@ public class PlayerCtrl : MonoBehaviour
         if(isDodge)
         {
             transform.Translate(dodgeDir * runSpeed * Time.deltaTime,Space.World);
+            isRun = false;
             isCrouch = false;
+            RecoveryTime = 0f;
         }
-        else if(isRun && stamina.MyCurrentValue > 0 && moveDir != Vector3.zero)
+        else if(isRun && moveDir != Vector3.zero)
         {
             transform.Translate(moveDir * runSpeed * Time.deltaTime,Space.World);
             stamina.MyCurrentValue -= 10f * Time.deltaTime;
             isCrouch = false;
+            RecoveryTime = 0f;
         }
         else if(isCrouch)
         {
             transform.Translate(moveDir * moveSpeed * 0.7f * Time.deltaTime,Space.World);
-            stamina.MyCurrentValue += 5f * Time.deltaTime;
+            St_Recovery();
         }
         else if(isWalk)
         {
             transform.Translate(moveDir * moveSpeed * Time.deltaTime,Space.World);
-            stamina.MyCurrentValue += 5f * Time.deltaTime;
+            St_Recovery();
         }
         else
         {
-            stamina.MyCurrentValue += 5f * Time.deltaTime;
+            St_Recovery();
         }
     }
 }
