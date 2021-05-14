@@ -18,26 +18,11 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    rigImportErrors: 
-    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Errors found in
-      old project file will be treated as a warnings. Configuration mis-match will
-      be ignored, but current Configuration needs to be fixed:\n\tParent for 'ROOTJ'
-      differs from one found in HumanDescription. 'Draw a sword 1' was found instead
-      of 'MainC'.\nCopied Avatar Rig Configuration mis-match. Bone length in copied
-      configuration does not match position in animation file:\n\t'lHipJ' : position
-      error = 107.337746 mm\n\t'lKneeJ' : position error = 399.915344 mm\n\t'lAnkleJ'
-      : position error = 399.918335 mm\n\t'lBallJ' : position error = 142.696671
-      mm\n\t'lToeJ' : position error = 68.326111 mm\n\t'rHipJ' : position error =
-      107.337746 mm\n\t'rKneeJ' : position error = 399.915344 mm\n\t'rAnkleJ' : position
-      error = 399.918335 mm\n\t'rBallJ' : position error = 142.696671 mm\n\t'rToeJ'
-      : position error = 68.326111 mm\n"
+    rigImportErrors: "Copied Avatar Rig Configuration mis-match. Transform hierarchy
+      does not match:\n\tCannot find root motion transform 'MainC'.\n"
+    rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'mixamo.com' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'Spine04J' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n\t'lBallJ' is inbetween
-      humanoid transforms and has rotation animation that will be discarded.\n\t'rBallJ'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
+    animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
