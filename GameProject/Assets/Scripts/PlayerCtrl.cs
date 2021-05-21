@@ -141,7 +141,7 @@ public class PlayerCtrl : MonoBehaviour
             isAttackPose_Change = false;
 
         }
-        else if (isAttackPose && isAttackBtnClick)
+        else if (isAttackPose && isAttackBtnClick && !isAttack)
         {
             anim.SetTrigger("doAttack");
             isAttack = true;

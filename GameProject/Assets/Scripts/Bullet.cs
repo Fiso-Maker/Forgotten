@@ -5,22 +5,23 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float speed = 5;
-
-    public GameObject target;
+    Vector3 dir;
+    Transform playerPos;
     // Start is called before the first frame update
     void Start()
     {
-        
     }
     void OnEnable()
     {
-        //transform.LookAt(target.transform.position);
+        playerPos = GameObject.Find("Player").GetComponent<Transform>();
+        dir = playerPos.transform.position - transform.position;
+        dir.Normalize();
     }
 
     // Update is called once per frame
     void Update()
-    {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+    {   
+        transform.Translate(dir * speed * Time.deltaTime);
     }
     private void OnTriggerEnter(Collider other)
     {
