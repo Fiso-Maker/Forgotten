@@ -19,9 +19,15 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
+<<<<<<< HEAD
   m_Title: Inspector
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 613}
+=======
+  m_Title: Game
+  m_RootView: {fileID: 2}
+  m_MinSize: {x: 875, y: 521}
+>>>>>>> parent of 3f0d063 (0.05)
   m_MaxSize: {x: 10000, y: 10000}
   m_Maximized: 1
 --- !u!114 &2
@@ -46,7 +52,11 @@ MonoBehaviour:
     y: 0
     width: 1920
     height: 997
+<<<<<<< HEAD
   m_MinSize: {x: 875, y: 613}
+=======
+  m_MinSize: {x: 875, y: 521}
+>>>>>>> parent of 3f0d063 (0.05)
   m_MaxSize: {x: 10000, y: 10000}
   m_UseTopView: 1
   m_TopViewHeight: 30
@@ -120,10 +130,17 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 947
+<<<<<<< HEAD
   m_MinSize: {x: 708, y: 563}
   m_MaxSize: {x: 18003, y: 14021}
   vertical: 0
   controlID: 140
+=======
+  m_MinSize: {x: 709, y: 471}
+  m_MaxSize: {x: 18004, y: 14021}
+  vertical: 0
+  controlID: 18
+>>>>>>> parent of 3f0d063 (0.05)
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -146,10 +163,17 @@ MonoBehaviour:
     y: 0
     width: 1069
     height: 947
+<<<<<<< HEAD
   m_MinSize: {x: 201, y: 563}
   m_MaxSize: {x: 4001, y: 12063}
   vertical: 1
   controlID: 42
+=======
+  m_MinSize: {x: 201, y: 463}
+  m_MaxSize: {x: 4001, y: 12063}
+  vertical: 1
+  controlID: 169
+>>>>>>> parent of 3f0d063 (0.05)
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -160,7 +184,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: SceneView
+  m_Name: AnimatorControllerTool
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -169,14 +193,20 @@ MonoBehaviour:
     y: 0
     width: 1069
     height: 412
+<<<<<<< HEAD
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 15}
+=======
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
+  m_ActualView: {fileID: 16}
+>>>>>>> parent of 3f0d063 (0.05)
   m_Panes:
   - {fileID: 15}
   - {fileID: 16}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -222,8 +252,8 @@ MonoBehaviour:
     y: 768
     width: 1069
     height: 179
-  m_MinSize: {x: 100, y: 100}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
@@ -253,7 +283,11 @@ MonoBehaviour:
   m_MinSize: {x: 232, y: 471}
   m_MaxSize: {x: 10002, y: 14021}
   vertical: 1
+<<<<<<< HEAD
   controlID: 98
+=======
+  controlID: 19
+>>>>>>> parent of 3f0d063 (0.05)
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -457,9 +491,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 1.8700253, y: 3.0805013, z: 0.8716793}
+    m_Target: {x: -2.7545712, y: -43.729546, z: -85.78424}
     speed: 2
-    m_Value: {x: 1.8700253, y: 3.0805013, z: 0.8716793}
+    m_Value: {x: -2.7545712, y: -43.729546, z: -85.78424}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -506,13 +540,19 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.037313312, y: 0.9466944, z: -0.11876553, w: -0.2972012}
+    m_Target: {x: -0.0036706827, y: 0.9682523, z: -0.24961841, w: -0.014232438}
     speed: 2
-    m_Value: {x: -0.03731226, y: 0.94666773, z: -0.118762195, w: -0.2971928}
+    m_Value: {x: -0.003670613, y: 0.96823394, z: -0.24961367, w: -0.014232168}
   m_Size:
+<<<<<<< HEAD
     m_Target: 5.1933265
     speed: 2
     m_Value: 5.4933267
+=======
+    m_Target: 57.3606
+    speed: 2
+    m_Value: 57.3606
+>>>>>>> parent of 3f0d063 (0.05)
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -651,9 +691,15 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
+<<<<<<< HEAD
       m_SelectedIDs: 323c0000
       m_LastClickedID: 15410
       m_ExpandedIDs: 54faffff403c0000
+=======
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: 54fbffff
+>>>>>>> parent of 3f0d063 (0.05)
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -715,22 +761,36 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
+<<<<<<< HEAD
     - Assets/Scripts
+=======
+    - Assets/Prefabs
+>>>>>>> parent of 3f0d063 (0.05)
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
+<<<<<<< HEAD
   - Assets/Scripts
+=======
+  - Assets/Prefabs
+>>>>>>> parent of 3f0d063 (0.05)
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\USER1\Documents\GitHub\Test\GameProject
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
+<<<<<<< HEAD
     m_SelectedIDs: 60420000
     m_LastClickedID: 16992
     m_ExpandedIDs: 000000002c4200002e42000030420000324200003442000036420000384200003a4200003c4200003e4200004042000000ca9a3b
+=======
+    m_SelectedIDs: 0c400000
+    m_LastClickedID: 16396
+    m_ExpandedIDs: 00000000f83f0000fa3f0000fc3f0000fe3f0000004000000240000000ca9a3b
+>>>>>>> parent of 3f0d063 (0.05)
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -785,7 +845,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: 72430000803a00005e430000f43a0000a43a00005a500000344d0000dc5d0000dc9f0000586e00008a3f0000a47e00000e440000084400004e500000543a00005a3a00009a3a0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
