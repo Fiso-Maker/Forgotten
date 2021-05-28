@@ -97,23 +97,6 @@ public class PlayerCtrl : MonoBehaviour
         PrintAnimation();
     }
 
-    /*private void Dodge()
-    {
-        if(!isDodge && isDodgeorCrouch && moveDir != Vector3.zero && stamina.MyCurrentValue >= 20f)
-        {
-            dodgeDir = moveDir;
-            anim.SetTrigger("doDodge");
-            isDodge=true;
-            isCrouch=false;
-            stamina.MyCurrentValue -= 20f;
-
-            Invoke("DodgeOut",0.75f);
-        }
-    }
-    private void DodgeOut()
-    {
-        isDodge=false;
-    }*/
     IEnumerator Dodge()
     {
         if (!isDodge && isDodgeorCrouch && moveDir != Vector3.zero && stamina.MyCurrentValue >= 20f)
