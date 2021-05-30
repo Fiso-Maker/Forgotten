@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 대검 콜라이더 생성 및 공격 시에만 콜라이더 setactive 하기
+// 몬스터 점프 공격 구현
 // enemy stat 이용해서 체력 만들어주고 공격 받으면 파괴되게 하기
 
 public class PlayerCtrl : MonoBehaviour
@@ -20,6 +20,8 @@ public class PlayerCtrl : MonoBehaviour
     public float RecoveryTime = 0f; // 스테미너 회복 시간
     public GameObject player;
 
+    public GameObject weapon;
+    public GameObject unequip;
     Rigidbody rb;
 
     Animator anim;  // 애니메이터 컴포넌트를 담기 위한 변수
@@ -46,6 +48,8 @@ public class PlayerCtrl : MonoBehaviour
 
     Vector3 moveDir;
     Vector3 dodgeDir;
+
+    Weapon equipWeapon;
     
     void Awake()
     {
@@ -62,6 +66,9 @@ public class PlayerCtrl : MonoBehaviour
     void Start()
     {
         rb=GetComponent<Rigidbody>();
+
+        equipWeapon = weapon.GetComponent<Weapon>();
+        equipWeapon.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -120,7 +127,10 @@ public class PlayerCtrl : MonoBehaviour
             anim.SetTrigger("StartAttack");
             anim.SetFloat("drawSword", 1.0f);
             isAttackPose_Change = true;
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(0.5f);
+            equipWeapon.gameObject.SetActive(true);
+            unequip.SetActive(false);
+            yield return new WaitForSeconds(1f);
             isAttackPose_Change = false;
 
         }
@@ -128,6 +138,7 @@ public class PlayerCtrl : MonoBehaviour
         {
             anim.SetTrigger("doAttack");
             isAttack = true;
+            equipWeapon.use();
             yield return new WaitForSeconds(1.5f);
             isAttack = false;
         }
@@ -137,8 +148,11 @@ public class PlayerCtrl : MonoBehaviour
         isAttackPose = false;
         anim.SetFloat("drawSword", -1.0f);
         isAttackPose_Change = true;
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.3f);
+        equipWeapon.gameObject.SetActive(false);
+        unequip.SetActive(true);
         isAttackPose_Change = false;
+        
     }
     void Attack_ED_Check()
     {

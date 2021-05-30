@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//¸ó½ºÅÍ Á¡ÇÁ ±¸Çö
+//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 public class Enemy : MonoBehaviour
 {
     public Stat health;
@@ -19,6 +19,10 @@ public class Enemy : MonoBehaviour
 
     Vector3 dir;
     float distance;
+
+    BulletFire fire;
+
+    public GameObject bulletPos;
 
     public float patternDelay = 5f;
     public float currentTime = 0f;
@@ -41,20 +45,15 @@ public class Enemy : MonoBehaviour
         target = GameObject.Find("Player").transform;
 
         health.Initialize(initHealth, initHealth);
+
+        bulletPos.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        dir = target.position - transform.position;
 
-        if (cc.isGrounded)
-        {
-            yVelocity = 0;
-        }
-
-        yVelocity += gravity * Time.deltaTime;
-        dir.y = yVelocity;
+        rotate();
 
         switch (state)
             {
@@ -80,14 +79,16 @@ public class Enemy : MonoBehaviour
                 break;
             }
 
-        cc.SimpleMove(Vector3.up * dir.y);
-
-        dir.y = 0;
-        // È¸Àü
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * Time.deltaTime);
-
     }
 
+    void rotate()
+    {
+        dir = target.position - transform.position;
+
+        dir.y=0;
+        
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * Time.deltaTime);
+    }
     void idle()
     {
         currentTime += Time.deltaTime;
@@ -95,7 +96,7 @@ public class Enemy : MonoBehaviour
         {
             currentTime = 0;
             
-            int a = Random.Range(0, 2); // 0ºÎÅÍ 1±îÁö
+            int a = Random.Range(0, 2); // 0ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½
 
             if (a==0)
             {
@@ -123,14 +124,25 @@ public class Enemy : MonoBehaviour
     void att_jump()
     {
 
+        yVelocity = jumpPower;
+
         if (Vector3.Distance(target.position, transform.position) > attackRange)
         {
-            state = State.attack_shoot;
+            state = State.idle;
         }
     }
     void att_shoot()
     {
+        bulletPos.SetActive(true);
+        currentTime += Time.deltaTime;
+        if(currentTime >= patternDelay)
+        {
+            currentTime = 0;
+            
+            bulletPos.SetActive(false);
 
+            state=State.idle;
+        }
     }
     void die()
     {
