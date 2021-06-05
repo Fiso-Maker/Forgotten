@@ -21,7 +21,18 @@ public class Weapon : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         meleeArea.enabled = true;
         yield return new WaitForSeconds(1.4f);
-        meleeArea.enabled = false;
-        
+        meleeArea.enabled = false; 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Enemy"))
+        {
+            print("attack_success");
+            var tar = other.gameObject.GetComponent<Enemy>();
+            tar.health.MyCurrentValue -= 10;
+
+            meleeArea.enabled = false;
+        }
     }
 }

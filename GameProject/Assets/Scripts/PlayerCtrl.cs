@@ -40,7 +40,7 @@ public class PlayerCtrl : MonoBehaviour
 
     bool isRunBtn; // 뛰기 버튼 입력 확인
 
-    bool isDodge; // 회피 확인
+    public bool isDodge; // 회피 확인
 
     bool isCrouch; // 앉기 확인
 

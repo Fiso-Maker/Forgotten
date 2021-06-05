@@ -23,17 +23,20 @@ public class Enemy : MonoBehaviour
     BulletFire fire;
 
     public GameObject bulletPos;
+    public GameObject jump_att_position;
 
+    public float jumpDelay = 2f;
     public float patternDelay = 5f;
     public float currentTime = 0f;
     public float attackRange = 10f;
+
+    public bool isDie = false;
     public enum State
     {
         idle,
         move,
         attack_jump,
-        attack_shoot,
-        die
+        attack_shoot
     }
     public State state = State.idle;
 
@@ -47,47 +50,76 @@ public class Enemy : MonoBehaviour
         health.Initialize(initHealth, initHealth);
 
         bulletPos.SetActive(false);
+
+        jump_att_position.SetActive(false);
+
+        isDie = false;
     }
 
     // Update is called once per frame
     void Update()
     {
 
+        
+        health_check();
         rotate();
-
-        switch (state)
+        if(!isDie)
+        {
+            gravity_check();
+            switch (state)
             {
-            case State.idle:
-                idle();
-                print("idle");
-                break;
-            case State.move:
-                move();
-                print("move");
-                break;
-            case State.attack_jump:
-                att_jump();
-                print("jump");
-                break;
-            case State.attack_shoot:
-                att_shoot();
-                print("shoot");
-                break;
-            case State.die:
-                die();
-                print("die");
-                break;
+                case State.idle:
+                    idle();
+                    print("idle");
+                    break;
+                case State.move:
+                    move();
+                    print("move");
+                    break;
+                case State.attack_jump:
+                    att_jump();
+                    print("jump");
+                    break;
+                case State.attack_shoot:
+                    att_shoot();
+                    print("shoot");
+                    break;
             }
+        }
+        
 
     }
 
     void rotate()
     {
-        dir = target.position - transform.position;
+        if(isDie)
+        {
+            float rotatespeed = 2f;
+            this.transform.rotation = Quaternion.Lerp(transform.rotation,Quaternion.Euler(0,0,90),rotatespeed*Time.deltaTime);
+        }
+        else
+        {
+            dir = target.position - transform.position;
 
-        dir.y=0;
+            dir.y=0;
         
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), rotSpeed * Time.deltaTime);
+        }
+        
+    }
+    void gravity_check()
+    {
+        cc.Move(Vector3.up * yVelocity);
+
+        if(cc.isGrounded)
+        {
+            yVelocity = 0;
+            jump_att_position.SetActive(false);
+        }
+        else
+        {
+            yVelocity += gravity*Time.deltaTime;
+        }
     }
     void idle()
     {
@@ -118,16 +150,27 @@ public class Enemy : MonoBehaviour
 
         if (distance < attackRange)
         {
+            currentTime = 0;
             state = State.attack_jump;
+        }
+        currentTime += Time.deltaTime;
+        if(currentTime >= patternDelay)
+        {
+            currentTime = 0;
+            
+            state = State.attack_shoot;
         }
     }
     void att_jump()
     {
-
         yVelocity = jumpPower;
 
-        if (Vector3.Distance(target.position, transform.position) > attackRange)
+        currentTime += Time.deltaTime;
+        if(currentTime >= jumpDelay)
         {
+            currentTime = 0;
+            
+            jump_att_position.SetActive(true);
             state = State.idle;
         }
     }
@@ -144,10 +187,20 @@ public class Enemy : MonoBehaviour
             state=State.idle;
         }
     }
-    void die()
+    void health_check()
     {
-
+        if(health.MyCurrentValue == 0)
+        {
+            StartCoroutine("Die");
+        }
     }
-   
-
+    IEnumerator Die(){
+        if(!isDie)
+        {
+            isDie = true;
+            yield return new WaitForSeconds(3f);
+            Destroy(this.gameObject);
+        }
+        
+    }
 }
