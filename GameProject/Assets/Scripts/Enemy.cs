@@ -128,8 +128,8 @@ public class Enemy : MonoBehaviour
         {
             currentTime = 0;
             
-            int a = Random.Range(0, 2); // 0���� 1����
-
+             // 랜덤하게 0부터 1까지, 0은 움직임 및 점프 공격 패턴, 1은 총알 발사 패턴
+            int a = Random.Range(0, 2);
             if (a==0)
             {
                 state = State.move;
@@ -163,25 +163,28 @@ public class Enemy : MonoBehaviour
     }
     void att_jump()
     {
-        yVelocity = jumpPower;
+        yVelocity = jumpPower; // 점프
 
         currentTime += Time.deltaTime;
-        if(currentTime >= jumpDelay)
+        if(currentTime >= jumpDelay) // 시간 체크
         {
             currentTime = 0;
             
             jump_att_position.SetActive(true);
+            // 점프 지점 전체 데미지용 콜라이더 활성화
             state = State.idle;
         }
     }
     void att_shoot()
     {
+        // 총알 발사 스크립트 활성화
         bulletPos.SetActive(true);
         currentTime += Time.deltaTime;
-        if(currentTime >= patternDelay)
+        if(currentTime >= patternDelay) // 시간 체크
         {
             currentTime = 0;
             
+            // 비활성화
             bulletPos.SetActive(false);
 
             state=State.idle;
@@ -199,7 +202,7 @@ public class Enemy : MonoBehaviour
         {
             isDie = true;
             yield return new WaitForSeconds(3f);
-            Destroy(this.gameObject);
+            GameManager.instance.GameOver_Win();
         }
         
     }

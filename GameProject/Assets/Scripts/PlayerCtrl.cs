@@ -58,8 +58,12 @@ public class PlayerCtrl : MonoBehaviour
         isAttackPose = false;
         isAttack = false;
 
-        health.Initialize(initHealth, initHealth);
-        stamina.Initialize(initStamina,initStamina);
+        try{
+            health.Initialize(initHealth, initHealth);
+            stamina.Initialize(initStamina,initStamina);
+        }
+        catch(NullReferenceException)
+        {}
     }
 
     // Start is called before the first frame update
@@ -74,73 +78,75 @@ public class PlayerCtrl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // if(GameManager.instance.currentGameState == GameState.inGame)
-        // {
-            
-        // }
-        inputKey();
+        if(GameManager.instance.currentGameState == GameState.inGame)
+        {   
+            HP_Check();
+            inputKey();
         
-        if(!isAttack && !isAttackPose_Change) // 공격중이 아닐때 이동
-        {
-            Move();
+            if(!isAttack && !isAttackPose_Change) // 공격중이 아닐때 이동
+            {
+                Move();
+            }
+            if(isDodgeorCrouch)
+            {
+                StartCoroutine(Dodge());
+            }
+            if (isAttackBtnClick)    // 공격 코루틴
+            {
+                StartCoroutine(Attack_St());
+            }
+            if (isAttackPose)        // 공격종료 코루틴
+            {
+                Attack_ED_Check();
+            }
+            else
+            {
+                Crouch();
+            }
         }
-        if(isDodgeorCrouch)
-        {
-            StartCoroutine(Dodge());
-        }
-        if (isAttackBtnClick)    // 공격 코루틴
-        {
-            StartCoroutine(Attack_St());
-        }
-        if (isAttackPose)        // 공격종료 코루틴
-        {
-            Attack_ED_Check();
-        }
-        else
-        {
-            Crouch();
-        }
-        
         PrintAnimation();
     }
 
     IEnumerator Dodge()
     {
+        // 스페이스 입력(조건 : 이동중, 스테이너가 20이상)
         if (!isDodge && isDodgeorCrouch && moveDir != Vector3.zero && stamina.MyCurrentValue >= 20f)
         {
-            dodgeDir = moveDir;
-            anim.SetTrigger("doDodge");
-            isDodge = true;
-            isCrouch = false;
-            stamina.MyCurrentValue -= 20f;
+            dodgeDir = moveDir; // 구르기 방향 고정
+            anim.SetTrigger("doDodge"); // 구르기 애니메이션
+            isDodge = true; // 무적상태
+            isCrouch = false; // 웅크리기 상태일때 구르면 웅크리기 해제
+            stamina.MyCurrentValue -= 20f; // 스테미너 소모
 
             yield return new WaitForSeconds(0.75f);
-            isDodge = false;
+            isDodge = false; // 무적종료
         }
     }
 
     IEnumerator Attack_St()
     {
-        if (!isAttack && isAttackBtnClick && !isAttackPose)
+        if (!isAttack && isAttackBtnClick && !isAttackPose) // 납도 상태일때 클릭
         {
             isAttackPose = true;
-            anim.SetTrigger("StartAttack");
-            anim.SetFloat("drawSword", 1.0f);
-            isAttackPose_Change = true;
+            anim.SetTrigger("StartAttack"); // 무기 활용하는 애니메이션 시동
+            anim.SetFloat("drawSword", 1.0f);   // 무기 발도
+            isAttackPose_Change = true; // 발도 상태 체크
             yield return new WaitForSeconds(0.5f);
-            equipWeapon.gameObject.SetActive(true);
-            unequip.SetActive(false);
+
+            equipWeapon.gameObject.SetActive(true); // 손에 적용한 무기 띄우기
+            unequip.SetActive(false);   // 등에 매단 무기 지우기
             yield return new WaitForSeconds(1f);
-            isAttackPose_Change = false;
+
+            isAttackPose_Change = false;    // 무기 발도모션 중 이동불가
 
         }
-        else if (isAttackPose && isAttackBtnClick && !isAttack)
+        else if (isAttackPose && isAttackBtnClick && !isAttack) //발도 상태일때 클릭
         {
-            anim.SetTrigger("doAttack");
-            isAttack = true;
-            equipWeapon.use();
+            anim.SetTrigger("doAttack");    // 공격하기
+            isAttack = true;    // 공격중
+            equipWeapon.use();  // 무기 타격 콜라이더 활성화
             yield return new WaitForSeconds(1.5f);
-            isAttack = false;
+            isAttack = false;   // 공격종료
         }
     }
     IEnumerator Attack_ED()
@@ -179,14 +185,16 @@ public class PlayerCtrl : MonoBehaviour
 
     private void Crouch()
     {
+        // 스페이스 입력(조건 : 이동중이 아님)
         if(!isCrouch && isDodgeorCrouch && moveDir == Vector3.zero)
         {
-            anim.SetTrigger("doCrouch");
-            isCrouch = true;
+            anim.SetTrigger("doCrouch"); // 애니메이션 시동
+            isCrouch = true; // 웅크리기 시전 후 이속 감소
         }
+        // 구르거나 공격했거나 shitf 키 입력 후 웅크리기 해제
         else if(isCrouch && isDodgeorCrouch && moveDir == Vector3.zero)
         {
-            isCrouch = false;
+            isCrouch = false; // 이속 감소 해제
         }
     }
 
@@ -205,13 +213,19 @@ public class PlayerCtrl : MonoBehaviour
 
     private void PrintAnimation()
     {
-        // 공격 중일때는 애니메이션 불가
         anim.SetBool("isRun",isRun);
         anim.SetBool("isWalk", isWalk);
         anim.SetBool("isCrouch",isCrouch);
         anim.SetBool("isAttackPose",isAttackPose);
     }
 
+    void HP_Check()
+    {
+        if(health.MyCurrentValue <=0)
+        {
+            GameManager.instance.GameOver_Lose();
+        }
+    }
     void Move()
     {
         moveDir = new Vector3(Camera.main.transform.TransformDirection(moveDir).x,0,Camera.main.transform.TransformDirection(moveDir).z);         

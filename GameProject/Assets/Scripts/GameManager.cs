@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum GameState{
+    Start,
     inGame,
-    gameOver
+    gameOver_Win,
+    gameOver_Lose
 }
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +14,15 @@ public class GameManager : MonoBehaviour
     public GameState currentGameState = GameState.inGame;
 
     void Awake(){
-        instance = this;
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else if(instance != this)
+        {
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(gameObject);
     }
     // Start is called before the first frame update
     void Start()
@@ -22,10 +32,22 @@ public class GameManager : MonoBehaviour
 
     void SetGameState(GameState newGameState)
     {
-        if(newGameState == GameState.inGame)
-        {}
-        else if(newGameState == GameState.gameOver)
-        {}
+        if(newGameState == GameState.Start)
+        {
+            SceneLoader.instance.load("Start");
+        }
+        else if(newGameState == GameState.inGame)
+        {
+            SceneLoader.instance.load("InGame");
+        }
+        else if(newGameState == GameState.gameOver_Win)
+        {
+            SceneLoader.instance.load("Win");
+        }
+        else if(newGameState == GameState.gameOver_Lose)
+        {
+            SceneLoader.instance.load("Lose");
+        }
         currentGameState = newGameState;
     }
 
@@ -36,12 +58,20 @@ public class GameManager : MonoBehaviour
     }
     public void StartGame()
     {
-        SetGameState (GameState.inGame);
+        SetGameState (GameState.Start);
+    }
+    public void StartinGame()
+    {
+        SetGameState(GameState.inGame);
     }
 
-    public void GameOver()
+    public void GameOver_Win()
     {
-
+        SetGameState(GameState.gameOver_Win);
+    }
+    public void GameOver_Lose()
+    {
+        SetGameState(GameState.gameOver_Lose);
     }
 
 }
