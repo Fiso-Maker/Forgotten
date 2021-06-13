@@ -70,19 +70,19 @@ public class Enemy : MonoBehaviour
             {
                 case State.idle:
                     idle();
-                    print("idle");
+                    // print("idle");
                     break;
                 case State.move:
                     move();
-                    print("move");
+                    // print("move");
                     break;
                 case State.attack_jump:
                     att_jump();
-                    print("jump");
+                    // print("jump");
                     break;
                 case State.attack_shoot:
                     att_shoot();
-                    print("shoot");
+                    // print("shoot");
                     break;
             }
         }
@@ -144,7 +144,7 @@ public class Enemy : MonoBehaviour
     {
         distance = dir.magnitude;
         
-        print(distance);
+        // print(distance);
 
         cc.SimpleMove(dir.normalized * speed);
 
